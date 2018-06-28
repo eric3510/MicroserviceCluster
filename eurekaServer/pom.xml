@@ -4,26 +4,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>server1</groupId>
-    <artifactId>server1</artifactId>
+    <groupId>eurekaServer</groupId>
+    <artifactId>eureka-server</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.4.0.RELEASE</version>
+        <relativePath/>
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <base.port>8667</base.port>
-        <server.name>server1</server.name>
-        <eureka.client.serviceUrl.defaultZone>
-            http://localhost:1111/eureka/
-        </eureka.client.serviceUrl.defaultZone>
+        <base.port>1111</base.port>
+        <eureka.instance.hostname>localhost</eureka.instance.hostname>
     </properties>
 
     <dependencies>
@@ -42,11 +39,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
         </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.40</version>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>mysql</groupId>-->
+        <!--<artifactId>mysql-connector-java</artifactId>-->
+        <!--<version>5.1.40</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -80,6 +77,26 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.7</source>
@@ -93,7 +110,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>txj.server.QuestionServerApplication</mainClass>
+                            <mainClass>txj.server.pole.PoleApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -109,32 +126,11 @@
             </activation>
             <properties>
                 <profileActive>online</profileActive>
-                <pole-config.dbName>question_server</pole-config.dbName>
-                <spring.datasource.db1.jdbcUrl></spring.datasource.db1.jdbcUrl>
-                <spring.datasource.db1.username></spring.datasource.db1.username>
-                <spring.datasource.db1.password></spring.datasource.db1.password>
-                <spring.datasource.db1.driver-class-name>com.mysql.jdbc.Driver</spring.datasource.db1.driver-class-name>
-                <spring.datasource.db1.platform>mysql</spring.datasource.db1.platform>
-
-                <spring.datasource.db2.jdbcUrl></spring.datasource.db2.jdbcUrl>
-                <spring.datasource.db2.username></spring.datasource.db2.username>
-                <spring.datasource.db2.password></spring.datasource.db2.password>
-                <spring.datasource.db2.driver-class-name>com.mysql.jdbc.Driver</spring.datasource.db2.driver-class-name>
-                <spring.datasource.db2.platform>mysql</spring.datasource.db2.platform>
-
-                <!-- redis -->
-                <redis-config.host>localhost</redis-config.host>
-                <redis-config.port>6379</redis-config.port>
-                <redis-config.auth></redis-config.auth>
-                <redis-config.maxActive>200</redis-config.maxActive>
-                <redis-config.maxIdle>32</redis-config.maxIdle>
-                <redis-config.maxWait>10000</redis-config.maxWait>
-                <redis-config.timeOut>10000</redis-config.timeOut>
-                <redis-config.testOnBorrow>false</redis-config.testOnBorrow>
-
-                <accesslog.directory>/mnt/MicroServiceCluster/online/${server.name}/logs/</accesslog.directory>
+                <pole-config.dbName>data_statistics</pole-config.dbName>
+                <accesslog.directory>/usr/data-statistics/logs/</accesslog.directory>
                 <server.port>${base.port}</server.port>
-                <spring.resources.static-locations>file:/mnt/MicroServiceCluster/online/${server.name}/polestatic/api/</spring.resources.static-locations>
+                <serviceUrl.defaultZone>http://${eureka.instance.hostname}:${server.port}/eureka/
+                </serviceUrl.defaultZone>
             </properties>
 
             <dependencies>
@@ -153,28 +149,22 @@
             </activation>
             <properties>
                 <profileActive>test</profileActive>
+                <accesslog.directory></accesslog.directory>
+                <server.port>${base.port}</server.port>
                 <pole-config.dbName>question_server_test</pole-config.dbName>
+                <serviceUrl.defaultZone>http://${eureka.instance.hostname}:${server.port}/eureka/
+                </serviceUrl.defaultZone>
                 <spring.datasource.db1.jdbcUrl></spring.datasource.db1.jdbcUrl>
                 <spring.datasource.db1.username></spring.datasource.db1.username>
                 <spring.datasource.db1.password></spring.datasource.db1.password>
-                <spring.datasource.db1.driver-class-name>com.mysql.jdbc.Driver</spring.datasource.db1.driver-class-name>
-                <spring.datasource.db1.platform>mysql</spring.datasource.db1.platform>
+                <spring.datasource.db1.driver-class-name></spring.datasource.db1.driver-class-name>
+                <spring.datasource.db1.platform></spring.datasource.db1.platform>
 
                 <spring.datasource.db2.jdbcUrl></spring.datasource.db2.jdbcUrl>
                 <spring.datasource.db2.username></spring.datasource.db2.username>
                 <spring.datasource.db2.password></spring.datasource.db2.password>
-                <spring.datasource.db2.driver-class-name>com.mysql.jdbc.Driver</spring.datasource.db2.driver-class-name>
-                <spring.datasource.db2.platform>mysql</spring.datasource.db2.platform>
-
-                <!-- redis -->
-                <redis-config.host>localhost</redis-config.host>
-                <redis-config.port>6379</redis-config.port>
-                <redis-config.auth></redis-config.auth>
-                <redis-config.maxActive>200</redis-config.maxActive>
-                <redis-config.maxIdle>32</redis-config.maxIdle>
-                <redis-config.maxWait>10000</redis-config.maxWait>
-                <redis-config.timeOut>10000</redis-config.timeOut>
-                <redis-config.testOnBorrow>false</redis-config.testOnBorrow>
+                <spring.datasource.db2.driver-class-name></spring.datasource.db2.driver-class-name>
+                <spring.datasource.db2.platform></spring.datasource.db2.platform>
 
                 <accesslog.directory></accesslog.directory>
                 <server.port>${base.port}</server.port>

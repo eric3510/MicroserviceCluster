@@ -1,0 +1,46 @@
+spring:
+  datasource:
+    db1:
+      url: @spring.datasource.db1.jdbcUrl@
+      username: @spring.datasource.db1.username@
+      password: @spring.datasource.db1.password@
+      driver-class-name: @spring.datasource.db1.driver-class-name@
+      platform: @spring.datasource.db1.platform@
+    db2:
+      url: @spring.datasource.db2.jdbcUrl@
+      username: @spring.datasource.db2.username@
+      password: @spring.datasource.db2.password@
+      driver-class-name: @spring.datasource.db2.driver-class-name@
+      platform: @spring.datasource.db2.platform@
+#  mvc:
+#    static-path-pattern: /api/**
+#  resources:
+#    static-locations: @spring.resources.static-locations@
+
+server:
+  port: 1111
+  context-path: /
+  tomcat:
+    uri-encoding: utf-8
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+
+start-up-config:
+  mysql: false
+  redis: false
+
+eureka:
+  instance:
+    hostname: @eureka.instance.hostname@
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    serviceUrl:
+      defaultZone: @serviceUrl.defaultZone@

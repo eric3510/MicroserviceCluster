@@ -1,2 +1,5 @@
 *.iml
 server1/.idea
+eurekaServer/.idea
+eurekaServer/logs
+server1/logs
